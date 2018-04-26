@@ -7,7 +7,6 @@ import InstreamProvider from 'providers/instream-provider';
 import Promise from 'polyfills/promise';
 import { offsetToSeconds } from 'utils/strings';
 import Events from 'utils/backbone.events';
-import _ from 'utils/underscore';
 import AdProgramController from 'program/ad-program-controller';
 
 var _defaultOptions = {
@@ -128,7 +127,6 @@ var InstreamAdapter = function(_controller, _model, _view, _mediaPool) {
         return this;
     };
 
-
     this.enableAdsMode = function(clickThroughUrl) {
         if (_inited || _destroyed) {
             return;
@@ -154,7 +152,7 @@ var InstreamAdapter = function(_controller, _model, _view, _mediaPool) {
         _instreamProvider.trigger(MEDIA_TIME, event);
     };
 
-    function triggerPlayRejected() { 
+    function triggerPlayRejected() {
         _adProgram.model.set('playRejected', true);
     }
 
@@ -227,7 +225,7 @@ var InstreamAdapter = function(_controller, _model, _view, _mediaPool) {
         }
         // Copy the playlist item passed in and make sure it's formatted as a proper playlist item
         let playlist = item;
-        if (_.isArray(item)) {
+        if (Array.isArray(item)) {
             _array = item;
             _arrayOptions = options || _arrayOptions;
             item = _array[_arrayIndex];
