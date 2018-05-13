@@ -151,7 +151,9 @@ class TimeSlider extends Slider {
             if (this.streamType === 'DVR') {
                 const dvrSeekLimit = this._model.get('dvrSeekLimit');
                 const diff = duration + dvrSeekLimit;
-                pct = (diff - (position + dvrSeekLimit)) / diff * 100;
+                const pos = position + dvrSeekLimit;
+                pct = (diff - pos) / diff * 100;
+                this.el.setAttribute('aria-valuetext', `${utils.timeFormat(Math.abs(pos))} before Live`);
             } else if (this.streamType === 'VOD' || !this.streamType) {
                 // Default to VOD behavior if streamType isn't set
                 pct = position / duration * 100;
