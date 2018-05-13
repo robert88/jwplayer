@@ -96,12 +96,18 @@ class TimeSlider extends Slider {
             .change('buffer', this.onBuffer, this)
             .change('streamType', this.onStreamType, this);
 
+
+        this.el.setAttribute('tabindex', '0');
+        this.el.setAttribute('role', 'slider');
+        this.el.setAttribute('aria-label', 'Time Slider');
+        this.el.removeAttribute('aria-hidden');
         this.elementRail.appendChild(this.timeTip.element());
 
         // Show the tooltip on while dragging (touch) moving(mouse), or moving over(mouse)
         this.elementUI = new UI(this.el, { useHover: true, useMove: true })
             .on('drag move over', this.showTimeTooltip.bind(this), this)
-            .on('dragEnd out', this.hideTimeTooltip.bind(this), this);
+            .on('dragEnd out', this.hideTimeTooltip.bind(this), this)
+            .on('click', () => this.el.focus());
     }
 
     update(percent) {
@@ -130,6 +136,8 @@ class TimeSlider extends Slider {
 
     onDuration(model, duration) {
         this.updateTime(model.get('position'), duration);
+        this.el.setAttribute('aria-valuemin', 0);
+        this.el.setAttribute('aria-valuemax', duration);
         this.drawCues();
     }
 
@@ -147,6 +155,7 @@ class TimeSlider extends Slider {
             } else if (this.streamType === 'VOD' || !this.streamType) {
                 // Default to VOD behavior if streamType isn't set
                 pct = position / duration * 100;
+                this.el.setAttribute('aria-valuetext', `${utils.timeFormat(position)} of ${utils.timeFormat(duration)}`);
             }
         }
         this.render(pct);
@@ -255,8 +264,11 @@ class TimeSlider extends Slider {
         utils.style(timeTip.el, { left: safePct + '%' });
     }
 
-    hideTimeTooltip() {
+    hideTimeTooltip(evt) {
         utils.removeClass(this.timeTip.el, 'jw-open');
+        if (evt.type === 'dragEnd') {
+            this.el.focus();
+        }
     }
 
     addCues(model, cues) {

@@ -134,6 +134,9 @@ export default class Controlbar {
         if (!this._isMobile) {
             volumeTooltip = new VolumeTooltip(_model, 'jw-icon-volume', vol,
                 cloneIcons('volume-0,volume-50,volume-100'));
+            volumeTooltip.element().setAttribute('aria-valuemin', 0);
+            volumeTooltip.element().setAttribute('aria-valuemax', 100);
+            volumeTooltip.element().setAttribute('role', 'slider');
         }
 
         const nextButton = button('jw-icon-next', () => {
@@ -343,6 +346,7 @@ export default class Controlbar {
             this.elements.volumetooltip.volumeSlider.render(muted ? 0 : vol);
             utils.toggleClass(this.elements.volumetooltip.element(), 'jw-off', muted);
             utils.toggleClass(this.elements.volumetooltip.element(), 'jw-full', vol >= 75 && !muted);
+            this.elements.volumetooltip.element().setAttribute('aria-valuetext', `${muted ? 0 : vol}%`);
         }
     }
 
