@@ -346,7 +346,7 @@ export default class Controlbar {
             this.elements.volumetooltip.volumeSlider.render(muted ? 0 : vol);
             utils.toggleClass(this.elements.volumetooltip.element(), 'jw-off', muted);
             utils.toggleClass(this.elements.volumetooltip.element(), 'jw-full', vol >= 75 && !muted);
-            this.elements.volumetooltip.element().setAttribute('aria-label', `${muted ? 0 : vol}% volume`);
+            this.elements.volumetooltip.element().setAttribute('aria-label', `volume ${muted ? 0 : vol}%`);
         }
     }
 
