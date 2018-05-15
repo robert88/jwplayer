@@ -134,9 +134,11 @@ export default class Controlbar {
         if (!this._isMobile) {
             volumeTooltip = new VolumeTooltip(_model, 'jw-icon-volume', vol,
                 cloneIcons('volume-0,volume-50,volume-100'));
-            volumeTooltip.element().setAttribute('aria-valuemin', 0);
-            volumeTooltip.element().setAttribute('aria-valuemax', 100);
-            volumeTooltip.element().setAttribute('role', 'status');
+
+            const volumeTooltipEl = volumeTooltip.element();
+            volumeTooltipEl.setAttribute('aria-valuemin', 0);
+            volumeTooltipEl.setAttribute('aria-valuemax', 100);
+            volumeTooltipEl.setAttribute('role', 'status');
         }
 
         const nextButton = button('jw-icon-next', () => {
@@ -337,16 +339,18 @@ export default class Controlbar {
     }
 
     renderVolume(muted, vol) {
+        const mute = this.elements.mute;
+        const volumeTooltip = this.elements.volumetooltip;
         // mute, volume, and volumetooltip do not exist on mobile devices.
-        if (this.elements.mute) {
-            utils.toggleClass(this.elements.mute.element(), 'jw-off', muted);
-            utils.toggleClass(this.elements.mute.element(), 'jw-full', !muted);
+        if (mute) {
+            utils.toggleClass(mute.element(), 'jw-off', muted);
+            utils.toggleClass(mute.element(), 'jw-full', !muted);
         }
-        if (this.elements.volumetooltip) {
-            this.elements.volumetooltip.volumeSlider.render(muted ? 0 : vol);
-            utils.toggleClass(this.elements.volumetooltip.element(), 'jw-off', muted);
-            utils.toggleClass(this.elements.volumetooltip.element(), 'jw-full', vol >= 75 && !muted);
-            this.elements.volumetooltip.element().setAttribute('aria-label', `volume ${muted ? 0 : vol}%`);
+        if (volumeTooltip) {
+            volumeTooltip.volumeSlider.render(muted ? 0 : vol);
+            utils.toggleClass(volumeTooltip.element(), 'jw-off', muted);
+            utils.toggleClass(volumeTooltip.element(), 'jw-full', vol >= 75 && !muted);
+            volumeTooltip.element().setAttribute('aria-label', `volume ${muted ? 0 : vol}%`);
         }
     }
 
